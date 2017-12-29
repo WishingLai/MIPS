@@ -10,38 +10,38 @@
 #include<math.h>
 using namespace std;
 
-int regV[32] = { 0 };	//32­Ó¼È¦s¾¹ªº­È		regV[regN[2][0]]=regV[2]
-int memory[32] = { 0 };  //32­ÓWORDªº°O¾ĞÅé
-int regAdd = 0;          //*EXE°õ¦æ§¹¶Çµ¹WB¦sµ¹reg
+int regV[32] = { 0 };	//32å€‹æš«å­˜å™¨çš„å€¼  regV[regN[2][0]]=regV[2]
+int memory[32] = { 0 };  //32å€‹WORDçš„è¨˜æ†¶é«”
+int regAdd = 0;          //*EXEåŸ·è¡Œå®Œå‚³çµ¦WBå­˜çµ¦reg
 int regSub = 0;			 //*
 int regLoad = 0;		 //*
-int HowManyLines = 0;	 //ÅªÀÉ®É­pºâÁ`¦@¦³´X­Ó«ü¥O
-string temp;			 //¼È¦sÅª¶i¨Óªº¤@¦æ
-int *instr;				//°ÊºA  ¦s«ü¥O
-int *rs;				//	    ¦srs
-int *rt;				//		¦srt
-int *rd;				//		¦srd
-int *offset;			//		¦soffset
-int *stall;				//		¦sstall
-int *Jflag;				//		§PÂ_beq¬O§_¸õÅD 0:¨S¸õ 1:¦³¸õ
-int *JumpToflag;		//		­YµL¸õ §PÂ_¤W¤W­Ó«ü¥O
-string *dataA;			//		§âÅªÀÉªºªF¦è©ñ¶i¦¹°}¦C¸Ì
-int compute=0;			//      ¼È¦s­pºâ¹Lªº­È ¦A©ñ¶i¹ïÀ³ªº°}¦C¸Ì
-bool memoryflag = false;//		¬O§_¦³¶i¥Xmem
-bool jump = false;		//		§PÂ_¬O§_¦³¸õ
-int signal[7] = { 0 };  //		ControlSignal
-string *temp2;			//		¦³°õ¦æ´N©ñ¶i¤@¦æ ¤è«K§PÂ_		
-double L;				//		¦r¦êªø«×
+int HowManyLines = 0;	 //è®€æª”æ™‚è¨ˆç®—ç¸½å…±æœ‰å¹¾å€‹æŒ‡ä»¤
+string temp;			 //æš«å­˜è®€é€²ä¾†çš„ä¸€è¡Œ
+int *instr;				//å‹•æ…‹  å­˜æŒ‡ä»¤
+int *rs;				//å­˜rs
+int *rt;				//å­˜rt
+int *rd;				//å­˜rd
+int *offset;				//å­˜offset
+int *stall;				//å­˜stall
+int *Jflag;				//åˆ¤æ–·beqæ˜¯å¦è·³èº 0:æ²’è·³ 1:æœ‰è·³
+int *JumpToflag;			//è‹¥ç„¡è·³ åˆ¤æ–·ä¸Šä¸Šå€‹æŒ‡ä»¤
+string *dataA;				//æŠŠè®€æª”çš„æ±è¥¿æ”¾é€²æ­¤é™£åˆ—è£¡
+int compute=0;				//æš«å­˜è¨ˆç®—éçš„å€¼ å†æ”¾é€²å°æ‡‰çš„é™£åˆ—è£¡
+bool memoryflag = false;		//æ˜¯å¦æœ‰é€²å‡ºmem
+bool jump = false;			//åˆ¤æ–·æ˜¯å¦æœ‰è·³
+int signal[7] = { 0 };  		//ControlSignal
+string *temp2;				//æœ‰åŸ·è¡Œå°±æ”¾é€²ä¸€è¡Œ æ–¹ä¾¿åˆ¤æ–·		
+double L;				//å­—ä¸²é•·åº¦
 string stage[6] = { "","IF","ID","EXE","MEM","WB" };
 string instruction[6] = { "","add","sub","lw","sw","beq" };
 int stageflag[5] = { 0 };
-int controlRtype[7];	//signal «¬ºA
+int controlRtype[7];			//signal å‹æ…‹
 int controllw[7];		//*
 int controlsw[7];		//*
 
 void reset_regW()
 {
-	for (int i = 1; i<32; i++)	//ªì©l¤Æ 1~31=1		regV[0~31]
+	for (int i = 1; i<32; i++)	//åˆå§‹åŒ– 1~31=1	regV[0~31]
 		regV[i] = 1;
 
 	for (int i = 0; i<32; i++)
@@ -49,8 +49,8 @@ void reset_regW()
 }
 void readfile() {
 	fstream fin1;	//file input "fin"
-	fin1.open("memory02.txt", ios::in);		//Åª¨úÀÉ®×
-											//Åª¨ú ±Nµ{¦¡½X©ñ¤Ja¦r¦ê
+	fin1.open("memory02.txt", ios::in);	//è®€å–æª”æ¡ˆ
+						//è®€å– å°‡ç¨‹å¼ç¢¼æ”¾å…¥aå­—ä¸²
 	while (!fin1.eof())
 	{
 		getline(fin1, temp);
@@ -79,7 +79,7 @@ void readfile() {
 		JumpToflag[i] = 0;
 	}
 }
-//void IF(fstream &fin, int count)			//»İ­n '&'
+//void IF(fstream &fin, int count)		//éœ€è¦ '&'
 void IF(int next_i, int count)
 {
 	//getline(fin, temp2[count]);
@@ -87,7 +87,7 @@ void IF(int next_i, int count)
 	//cout << dataA[count];
 	temp2[next_i] = dataA[count];
 	//cout << temp2[next_i] << endl;
-	//cout <<"¤U¤@­Ó¦ì¸m"<< next_i << endl;
+	//cout <<"ä¸‹ä¸€å€‹ä½ç½®"<< next_i << endl;
 }
 
 void ID(int i)
@@ -97,15 +97,15 @@ void ID(int i)
 	int circle = 0;
 	while (getline(ss, sub_str, ' ')) {
 		//cout<<sub_str<<endl;
-		if (circle == 0) {													//instr  §PÂ_
+		if (circle == 0) {			//instr  åˆ¤æ–·
 			if (sub_str == "add")  instr[i] = 1;
 			if (sub_str == "sub")  instr[i] = 2;
 			if (sub_str == "lw")  instr[i] = 3;
 			if (sub_str == "sw")  instr[i] = 4;
 			if (sub_str == "beq")  instr[i] = 5;
 		}
-		if (circle == 1) {													//²Ä¤@­Ó¦ì¸mªº§PÂ_
-			if (instr[i] == 1 || instr[i] == 2) {								//R-type ¦s¶ird
+		if (circle == 1) {					//ç¬¬ä¸€å€‹ä½ç½®çš„åˆ¤æ–·
+			if (instr[i] == 1 || instr[i] == 2) {		//R-type å­˜é€²rd
 				L = sub_str.length();
 				compute = 0;
 				for (int x = L - 2; x>0; x--) {
@@ -113,7 +113,7 @@ void ID(int i)
 				}
 				rd[i] = compute;
 			}
-			if (instr[i] == 3 || instr[i] == 4 || instr[i] == 5) {			//lw,sw,beq ¦s¶irs
+			if (instr[i] == 3 || instr[i] == 4 || instr[i] == 5) {	//lw,sw,beq å­˜é€²rs
 				L = sub_str.length();
 				compute = 0;
 				for (int x = L - 2; x > 0; x--) {
@@ -122,8 +122,8 @@ void ID(int i)
 				rs[i] = compute;
 			}
 		}
-		if (circle == 2) {														//²Ä¤G­Ó¦ì¸mªº§PÂ_
-			if (instr[i] == 1 || instr[i] == 2) {								//R-type ¦s¶irs
+		if (circle == 2) {					//ç¬¬äºŒå€‹ä½ç½®çš„åˆ¤æ–·
+			if (instr[i] == 1 || instr[i] == 2) {		//R-type å­˜é€²rs
 				L = sub_str.length();
 				compute = 0;
 				for (int x = L - 2; x>0; x--) {
@@ -131,13 +131,13 @@ void ID(int i)
 				}
 				rs[i] = compute;
 			}
-			if (instr[i] == 3 || instr[i] == 4) {								//lw,sw ¦A¤Á³Î
+			if (instr[i] == 3 || instr[i] == 4) {			//lw,sw å†åˆ‡å‰²
 				stringstream ff(sub_str);
 				string sub_str2;
 				int s = 0;
 				while (getline(ff, sub_str2, '(')) {
 					switch (s) {
-					case 0:												//¦s¶ioffset
+					case 0:					//å­˜é€²offset
 						L = sub_str2.length();
 						compute = 0;
 						for (int x = L - 1; x >= 0; x--) {
@@ -145,7 +145,7 @@ void ID(int i)
 						}
 						offset[i] = compute;
 						break;
-					case 1:												//¦s¶irt
+					case 1:					//å­˜é€²rt
 						L = sub_str2.length();
 						compute = 0;
 						for (int x = L - 2; x>0; x--) {
@@ -166,8 +166,8 @@ void ID(int i)
 				rt[i] = compute;
 			}
 		}
-		if (circle == 3) {													//²Ä¤T­Ó¦ì¸mªº§PÂ_
-			if (instr[i] == 1 || instr[i] == 2) {								//R-type ¦s¶irt
+		if (circle == 3) {						//ç¬¬ä¸‰å€‹ä½ç½®çš„åˆ¤æ–·
+			if (instr[i] == 1 || instr[i] == 2) {			//R-type å­˜é€²rt
 				L = sub_str.length();
 				compute = 0;
 				for (int x = L - 1; x>0; x--) {
@@ -175,8 +175,8 @@ void ID(int i)
 				}
 				rt[i] = compute;
 			}
-			if (instr[i] == 5) {												//beq ¦s¶ioffset
-				if (sub_str[0] == '-') {													//§PÂ_¥¿­t
+			if (instr[i] == 5) {					//beq å­˜é€²offset
+				if (sub_str[0] == '-') {													//åˆ¤æ–·æ­£è² 
 					L = sub_str.length();
 					compute = 0;
 					for (int x = L - 1; x>0; x--) {
@@ -198,76 +198,76 @@ void ID(int i)
 		}
 		circle++;
 	}
-	//--------------------------------------------------------------------------------------------§PÂ_¬O§_¦³stall
+	//--------------------------------------------------------------------------------------------åˆ¤æ–·æ˜¯å¦æœ‰stall
 	if (jump)stall[i] = 0;
 	else if (i>0) {
 		switch (instr[i]) {
 		case 1://add
-			if (instr[i - 1] == 1) {								//«e«ü¥O¬Oadd
+			if (instr[i - 1] == 1) {						//å‰æŒ‡ä»¤æ˜¯add
 				if (rd[i - 1] == rs[i] || rd[i - 1] == rt[i])
 					stall[i] = 2;
 			}
-			if (instr[i - 1] == 2) {								//«e«ü¥O¬Osub
+			if (instr[i - 1] == 2) {						//å‰æŒ‡ä»¤æ˜¯sub
 				if (rd[i - 1] == rs[i] || rd[i - 1] == rt[i])
 					stall[i] = 2;
 			}
-			if (instr[i - 1] == 3) {								//«e«ü¥O¬Olw
+			if (instr[i - 1] == 3) {						//å‰æŒ‡ä»¤æ˜¯lw
 				if (rs[i - 1] == rs[i] || rs[i - 1] == rt[i])
 					stall[i] = 2;
 			}
-			if (instr[i - 1] == 4) { stall[i] = 0;	}				//«e«ü¥O¬Osw
+			if (instr[i - 1] == 4) { stall[i] = 0;	}				//å‰æŒ‡ä»¤æ˜¯sw
 			break;
 
 		case 2://sub
-			if (instr[i - 1] == 1) {								//«e«ü¥O¬Oadd
+			if (instr[i - 1] == 1) {						//å‰æŒ‡ä»¤æ˜¯add
 				if (rd[i - 1] == rs[i] || rd[i - 1] == rt[i])
 					stall[i] = 2;
 			}
-			if (instr[i - 1] == 2) {								//«e«ü¥O¬Osub
+			if (instr[i - 1] == 2) {						//å‰æŒ‡ä»¤æ˜¯sub
 				if (rd[i - 1] == rs[i] || rd[i - 1] == rt[i])
 					stall[i] = 2;
 			}
-			if (instr[i - 1] == 3) {								//«e«ü¥O¬Olw
+			if (instr[i - 1] == 3) {						//å‰æŒ‡ä»¤æ˜¯lw
 				if (rs[i - 1] == rs[i] || rs[i - 1] == rt[i])
 					stall[i] = 2;
 			}
-			if (instr[i - 1] == 4) { stall[i] = 0; 	}				//«e«ü¥O¬Osw
+			if (instr[i - 1] == 4) { stall[i] = 0; 	}				//å‰æŒ‡ä»¤æ˜¯sw
 			break;
 		case 3://lw
-			if (instr[i - 1] == 1) {								//«e«ü¥O¬Oadd
+			if (instr[i - 1] == 1) {						//å‰æŒ‡ä»¤æ˜¯add
 				if (rd[i - 1] == rt[i])
 					stall[i] = 2;
 			}
-			if (instr[i - 1] == 2) {								//«e«ü¥O¬Osub
+			if (instr[i - 1] == 2) {						//å‰æŒ‡ä»¤æ˜¯sub
 				if (rd[i - 1] == rt[i])
 					stall[i] = 2;
 			}
-			if (instr[i - 1] == 3) {								//«e«ü¥O¬Olw
+			if (instr[i - 1] == 3) {						//å‰æŒ‡ä»¤æ˜¯lw
 				if (rs[i - 1] == rt[i])
 					stall[i] = 2;
 			}
-			if (instr[i - 1] == 4) {								//«e«ü¥O¬Osw
+			if (instr[i - 1] == 4) {						//å‰æŒ‡ä»¤æ˜¯sw
 				if ((rt[i - 1] + offset[i - 1] / 4) == (rt[i] + offset[i] / 4))
 					stall[i] = 1;
 			}
 			break;
 		case 4://sw
-			if (instr[i - 1] == 1) {								//«e«ü¥O¬Oadd
+			if (instr[i - 1] == 1) {						//å‰æŒ‡ä»¤æ˜¯add
 				if (rd[i - 1] == rs[i])
 					stall[i] = 2;
 			}
-			if (instr[i - 1] == 2) {								//«e«ü¥O¬Osub
+			if (instr[i - 1] == 2) {						//å‰æŒ‡ä»¤æ˜¯sub
 				if (rd[i - 1] == rs[i])
 					stall[i] = 2;
 			}
-			if (instr[i - 1] == 3) {								//«e«ü¥O¬Olw
+			if (instr[i - 1] == 3) {						//å‰æŒ‡ä»¤æ˜¯lw
 				if (rs[i - 1] == rs[i])
 					stall[i] = 2;
 			}
-			if (instr[i - 1] == 4) stall[i] = 0;					//«e«ü¥O¬Osw
+			if (instr[i - 1] == 4) stall[i] = 0;					//å‰æŒ‡ä»¤æ˜¯sw
 			break;
 		case 5://beq
-			if (instr[i - 1] == 1) {								//«e«ü¥O¬Oadd
+			if (instr[i - 1] == 1) {						//å‰æŒ‡ä»¤æ˜¯add
 				if ((rd[i - 1] == rs[i]) || (rd[i - 1] == rt[i])) {
 					stall[i] = 2;	
 				}
@@ -281,7 +281,7 @@ void ID(int i)
 					}
 				}
 
-			if (instr[i - 1] == 2) {								//«e«ü¥O¬Osub
+			if (instr[i - 1] == 2) {						//å‰æŒ‡ä»¤æ˜¯sub
 				if ((rd[i - 1] == rs[i]) || (rd[i - 1] == rt[i])) {
 					stall[i] = 2;
 				}
@@ -295,7 +295,7 @@ void ID(int i)
 				}
 			}
 
-			if (instr[i - 1] == 3) {								//«e«ü¥O¬Olw
+			if (instr[i - 1] == 3) {						//å‰æŒ‡ä»¤æ˜¯lw
 				if ((rs[i - 1] == rs[i])|| (rs[i - 1] == rt[i]))
 					stall[i] = 2;
 				else {
@@ -307,7 +307,7 @@ void ID(int i)
 							stall[i] = 1;
 				}
 			}
-			if (instr[i - 1] == 4) stall[i] = 0;					//«e«ü¥O¬Osw
+			if (instr[i - 1] == 4) stall[i] = 0;					//å‰æŒ‡ä»¤æ˜¯sw
 			break;
 		}
 	}
@@ -377,7 +377,7 @@ int main()
 	readfile();
 
 	fstream fin333;	//file input "fin"
-	fin333.open("memory02.txt", ios::in);		//Åª¨úÀÉ®×
+	fin333.open("memory02.txt", ios::in);		//è®€å–æª”æ¡ˆ
 	int coco = 0;
 	while (!fin333.eof())
 	{
@@ -390,12 +390,12 @@ int main()
 	//for (int i = 0; i < coco; i++) { cout << dataA[i] << endl; }
 
 	//fstream fin;	//file input "fin"
-	//fin.open("memory.txt", ios::in);		//Åª¨úÀÉ®×
+	//fin.open("memory.txt", ios::in);		//è®€å–æª”æ¡ˆ
 	fstream fout;	//file output "fout"
-	fout.open("result02.txt", ios::out);	//²MªÅ,¦A¿é¤J¤º®e
-										//Åª¨ú ±Nµ{¦¡½X©ñ¤Ja¦r¦ê
+	fout.open("result02.txt", ios::out);	//æ¸…ç©º,å†è¼¸å…¥å…§å®¹
+										//è®€å– å°‡ç¨‹å¼ç¢¼æ”¾å…¥aå­—ä¸²
 	int next_i = 0;
-	for (int i = 0; i < HowManyLines * 10; i++) {				//-----------MIPS¼ÒÀÀ°õ¦æ
+	for (int i = 0; i < HowManyLines * 10; i++) {				//-----------MIPSæ¨¡æ“¬åŸ·è¡Œ
 		//cout << "**"<<i << endl;
 		
 		IF(next_i, i);
@@ -420,7 +420,7 @@ int main()
 	}
 	int totalstall = 0;
 	int Cycles = 0;
-	int countC = 0;//Á`¦@¦³´X¦æ
+	int countC = 0;//ç¸½å…±æœ‰å¹¾è¡Œ
 	for (int k = 0; k < HowManyLines * 10; k++) {
 		if (temp2[k] != "") {
 			countC++;
@@ -431,7 +431,7 @@ int main()
 	for (int j = 0; j < countC; j++) {
 		totalstall = totalstall + stall[j];
 	}
-	Cycles = 5 - 1 + countC + totalstall;			// ­pºâÁ`¦@¦³´X¦æ ¨Ó§ïHowmanyLines
+	Cycles = 5 - 1 + countC + totalstall;			// è¨ˆç®—ç¸½å…±æœ‰å¹¾è¡Œ ä¾†æ”¹HowmanyLines
 	for (int l = 0; l < HowManyLines; l++) {
 		if (Jflag[l] == 2)
 			Cycles++;
@@ -649,7 +649,7 @@ int main()
 	}*/
 
 	for (int i = 0; i<32; i++) {
-		printf("R[%2d]¡G%2d ", i, regV[i]); 
+		printf("R[%2d]ï¼š%2d ", i, regV[i]); 
 		fout << "R[" << i << "]:" << regV[i]<<" ";
 		if ((i + 1) % 8 == 0) { cout << endl; fout << endl; }
 	}
@@ -657,7 +657,7 @@ int main()
 	cout <<"-----------------------------------------------------------------"<< endl;
 	fout << "-----------------------------------------------------------------" << endl;
 	for (int i = 0; i<32; i++) {
-		printf("M[%2d]¡G%2d ", i, memory[i]);
+		printf("M[%2d]ï¼š%2d ", i, memory[i]);
 		fout << "M[" << i << "]:" << memory[i] << " ";
 		if ((i + 1) % 8 == 0) { cout << endl; fout << endl; }
 	}
